@@ -8,34 +8,33 @@ module Macky (
 import System.Process
 import Macky.Args
 import Text.Regex.TDFA
+import System.Exit
 
 change :: Arguments -> IO ()
 change args = do
-    let mac = mac args
-    let interface = interface args
+    let new_mac = mac args
+    let new_interface = interface args
 
-    -- check if valid mac
-    -- check if valid interface
-    if not (checkMac mac) then do
+    isInterfaceValid <- checkInterface new_interface
+
+    if not (checkMac new_mac) then do
         print "Invalid mac address"
         return ()
-    else if not (checkInterface interface) then do
+    else if not isInterfaceValid then do
         print "Invalid interface"
         return ()
     else do
-
-    -- "sudo ip link set dev wlan0 address 22:22:22:22:22:22"
-    out <- readProcessWithExitCode "ip" ["link", "set", "dev", interface, "address", mac] ""
-    print "Changed mac address"
+        readProcessWithExitCode "ip" ["link", "set", "dev", new_interface, "address", new_mac] ""
+        print "Changed mac address"
 
 checkMac :: String -> Bool
 checkMac mac = do
     mac =~ "^([0-9A-Fa-f]{2}:){5}([0-9A-Fa-f]{2})$" :: Bool
 
-checkInterface :: String -> Bool
+checkInterface :: String -> IO Bool
 checkInterface interface = do
-    out <- readProcessWithExitCode "ip" ["link", "show", "dev", interface] ""
-    "does not exist" `notElem` out
+    (exit_code, _, _) <- readProcessWithExitCode "ip" ["link", "show", interface] ""
+    return $ exit_code == ExitSuccess
 
 bruteforce :: Arguments -> IO ()
 bruteforce args = do

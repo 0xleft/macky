@@ -5,10 +5,14 @@ import Macky
 main :: IO ()
 main = hspec $ do
     describe "test checkInterface" $ do
-        it "should return false for first and true for second interface" $ do
-            checkInterface "wlan0" `shouldBe` True
-            checkInterface "non-existant-interface" `shouldBe` False
-    
+        it "should return true for valid interface" $ do
+            isInterfaceValid <- checkInterface "lo" --wsl
+            isInterfaceValid `shouldBe` True
+
+        it "should return false for invalid interface" $ do
+            isInterfaceValid <- checkInterface "not-an-interface"
+            isInterfaceValid `shouldBe` False
+
     describe "test checkMac" $ do
         it "should correcly recognize mac address using regex" $ do
             checkMac "22:22:22:22:22:22" `shouldBe` True
