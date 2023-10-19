@@ -1,6 +1,7 @@
+{-# OPTIONS_GHC -Wno-unused-do-bind #-}
+
 module Macky (
     change,
-    bruteforce,
     checkMac,
     checkInterface
 ) where
@@ -35,7 +36,3 @@ checkInterface :: String -> IO Bool
 checkInterface interface = do
     (exit_code, _, _) <- readProcessWithExitCode "ip" ["link", "show", interface] ""
     return $ exit_code == ExitSuccess
-
-bruteforce :: Arguments -> IO ()
-bruteforce args = do
-    print args

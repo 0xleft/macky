@@ -6,8 +6,7 @@ module Macky.Args (
 import Options.Applicative
 
 data Arguments = Arguments
-    { subcommand :: String
-    , interface :: String
+    { interface :: String
     , mac :: String
     , vendor :: Bool
     , verbose :: Bool
@@ -15,18 +14,10 @@ data Arguments = Arguments
 
 parseArguments :: Parser Arguments
 parseArguments = Arguments
-    <$> parseSubCommand
-    <*> parseInterface
+    <$> parseInterface
     <*> parseMac
     <*> parseVendor
     <*> parseVerbose
-
-parseSubCommand :: Parser String
-parseSubCommand = strOption
-    ( long "subcommand"
-   <> short 's'
-   <> metavar "SUBCOMMAND"
-   <> help "Subcommand" )
 
 parseInterface :: Parser String
 parseInterface = strOption

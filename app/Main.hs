@@ -16,7 +16,4 @@ main = start =<< execParser opts
 
 start :: Arguments -> IO ()
 start args = do
-    case subcommand args of
-        "bruteforce" -> bruteforce args
-        "change"     -> change args
-        _            -> putStrLn "Invalid subcommand. Valid subcommands are: bruteforce, change"
+	change args
